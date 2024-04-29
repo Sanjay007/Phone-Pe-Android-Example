@@ -43,15 +43,15 @@ class MainActivity : AppCompatActivity() {
 
         PhonePe.init(applicationContext, PhonePeEnvironment.SANDBOX, "PGTESTPAYUAT", "")
         val data = JSONObject()
-        data.put("merchantTransactionId",System.currentTimeMillis().toString())
+        data.put("merchantTransactionId","23344334223")
         data.put("merchantId", "PGTESTPAYUAT")
         data.put("merchantUserId", System.currentTimeMillis().toString())
         data.put("amount", 1200)
-        data.put("mobileNumber", "8886478899")
+        data.put("mobileNumber", "999999999")
         data.put("callbackUrl", "https://webhook.site/0ceef0c2-6b5f-48e7-aaa5-f06d7b8ce50a")
         val mPaymentInstrument = JSONObject()
-        mPaymentInstrument.put("type", "UPI_INTENT")
-        mPaymentInstrument.put("targetApp", "com.phonepe.simulator")
+        mPaymentInstrument.put("type", "PAY_PAGE")
+            //mPaymentInstrument.put("targetApp", "com.phonepe.simulator")
         data.put("paymentInstrument", mPaymentInstrument)
         val devicecon= JSONObject();
         devicecon.put("deviceOS","ANDROID");
@@ -59,13 +59,10 @@ class MainActivity : AppCompatActivity() {
 
         val base64Body: String = Base64.encodeToString(data.toString().toByteArray(
             Charset.defaultCharset()), Base64.NO_WRAP)
-
         val checkSumGet: String = base64Body + "/pg/v1/pay" + "099eb0cd-02cf-4e2a-8aca-3e6c6aff0399";
-
-
         val hexcodedString = toHexString(getSHA(checkSumGet)) + "###" + 1
-
         val b2BPGRequest = B2BPGRequestBuilder().setData(base64Body).setChecksum(hexcodedString).setUrl("/pg/v1/pay").build()
+
 
         binding.fab.setOnClickListener { view ->
 
@@ -73,10 +70,11 @@ class MainActivity : AppCompatActivity() {
                 startActivityForResult(PhonePe.getImplicitIntent(this, b2BPGRequest, "")!!,777);
 
             } catch(e: PhonePeInitException){
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null)
+                    .setAnchorView(R.id.fab).show()
             }
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null)
-                .setAnchorView(R.id.fab).show()
+
         }
     }
 
